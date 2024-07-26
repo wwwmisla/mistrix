@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import url('reset.css');
+@import url('auth.css');
+@import url('header.css');
+@import url('main.css');
+
+:root {
+    --brand-color-10: #31a252;
+    --brand-color-20: #6ecf42;
+    --brand-color-30: #dffda7;
+    --dark-05: #000000;
+    --dark-10: #1a202c;
+    --dark-20: #656769;
+    --dark-30: #e8e8e8;
+    --dark-40: #f7fafc;
+    --dark-50: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+*:focus {
+    outline: none;
+}
+
+body {
+    background-color: var(--dark-50);
+    color: var(--dark-10);
+    font-family: 'Archivo', sans-serif;
+    line-height: 1.7;
+    height: 100vh;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
