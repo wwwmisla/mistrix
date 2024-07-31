@@ -1,110 +1,165 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Seleção de elementos do DOM
-    const auth = document.getElementById('auth'); // container auth
-    const header = document.getElementById('header'); // container header
-    const main = document.getElementById('main'); // container main
-    const infoSection = document.getElementById('info-section'); // container info-section
-    const authSection = document.getElementById('auth-section'); // sections auth/post/game
-    const postsSection = document.getElementById('posts-section');
-    const gameSection = document.getElementById('game-section');
-    const loginContainer = document.getElementById('login-container'); // containers login/register
-    const registerContainer = document.getElementById('register-container');
-    const loginForm = document.getElementById('login-form'); // forms login/register
-    const registerForm = document.getElementById('register-form');
-    const linkToRegister = document.getElementById('link-to-register'); // links login/register
-    const linkToLogin = document.getElementById('link-to-login');
-    const profileNameHeader = document.getElementById('profile-name'); // profile name header
-    const saluName = document.getElementById('salu-username'); // salutation username 
-    const postForm = document.getElementById('post-form'); // form de postagem
-    const postsList = document.getElementById('posts-list'); // lista de postagens
-    const logoutButton = document.getElementById('logout'); // botão de logout
-    const profileDropdownButton = document.getElementById('profile-dropdown-button'); // botão de perfil
-    const profileDropdown = document.getElementById('profile-dropdown'); // dropdown de perfil
-    const deleteAccountLink = document.getElementById('delete-account'); // link de exclusão de conta
-    const fullnameInfo = document.getElementById('fullname-info');
-    const usernameInfo = document.getElementById('username-info');
-    const userTime = document.getElementById('user-time');
-    const userDetails = document.getElementById('user-details');
-    const profilePictureInfo = document.getElementById('profile-picture-info');
-
-    // Estado inicial do armazenamento local
-    let users = JSON.parse(localStorage.getItem('users')) || []; // lista de usuarios
-    let currentUser = JSON.parse(localStorage.getItem('currentUser')); // usuario logado
-    let posts = JSON.parse(localStorage.getItem('posts')) || []; // lista de postagens
-
-    // Função para salvar dados no localStorage
-    const saveData = () => {
-        localStorage.setItem('users', JSON.stringify(users)); // salva a lista de usuarios
-        localStorage.setItem('currentUser', JSON.stringify(currentUser)); // salva o usuario logado
-        localStorage.setItem('posts', JSON.stringify(posts)); // salva a lista de postagens
+    const elements = {
+        auth: document.getElementById('auth'),
+        header: document.getElementById('header'),
+        main: document.getElementById('main'),
+        infoSection: document.getElementById('info-section'),
+        authSection: document.getElementById('auth-section'),
+        postsSection: document.getElementById('posts-section'),
+        gameSection: document.getElementById('game-section'),
+        profileSection: document.getElementById('edit-profile-section'),
+        ilusSection: document.getElementById('ilus-section'),
+        loginContainer: document.getElementById('login-container'),
+        registerContainer: document.getElementById('register-container'),
+        loginForm: document.getElementById('login-form'),
+        registerForm: document.getElementById('register-form'),
+        linkToRegister: document.getElementById('link-to-register'),
+        linkToLogin: document.getElementById('link-to-login'),
+        profileNameHeader: document.getElementById('profile-name'),
+        saluName: document.getElementById('salu-username'),
+        postForm: document.getElementById('post-form'),
+        postsList: document.getElementById('posts-list'),
+        logoutButton: document.getElementById('logout'),
+        profileDropdownButton: document.getElementById('profile-dropdown-button'),
+        profileDropdown: document.getElementById('profile-dropdown'),
+        deleteAccountLink: document.getElementById('delete-account'),
+        fullnameInfo: document.getElementById('fullname-info'),
+        usernameInfo: document.getElementById('username-info'),
+        userTime: document.getElementById('user-time'),
+        userDetails: document.getElementById('user-details'),
+        profilePictureInfo: document.getElementById('profile-picture-info'),
+        imgElement: document.getElementById('random-img'),
+        homeLink: document.getElementById('home-link'),
+        gameLink: document.getElementById('game-link'),
+        profileLink: document.getElementById('profile-link') // Adicionei essa linha
     };
 
-    // Função para calcular o tempo desde o registro
+    // Estado inicial do armazenamento local e de sessão
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    // Funções auxiliares
+    const saveData = () => {
+        localStorage.setItem('users', JSON.stringify(users));
+        if (currentUser) {
+            if (document.getElementById('remember-me').checked) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+        } else {
+            localStorage.removeItem('currentUser');
+        }
+        localStorage.setItem('posts', JSON.stringify(posts));
+    };
+
     const getTimeSinceRegistration = (registrationDate) => {
         const now = new Date();
         const registeredDate = new Date(registrationDate);
         const timeDiff = now - registeredDate;
         const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
         return `${days} dias atrás`;
     };
 
-    // Função para mostrar a seção apropriada
-    const showSection = () => {
-        if (currentUser) { // se o usuario estiver logado
-            auth.style.display = 'none'; // esconde o container auth
-            authSection.style.display = 'none'; // esconde a seção de login/registro
-            header.style.display = 'flex'; // mostra o container header
-            main.style.display = 'grid'; // mostra o container main
-            infoSection.style.display = 'flex'; // mostra o container info-section
-            postsSection.style.display = 'flex'; // mostra a seção de postagens
-            gameSection.style.display = 'flex'; // mostra a seção de jogo
+    const getGreeting = () => {
+        const now = new Date();
+        const hours = now.getHours();
 
-            profileNameHeader.textContent = currentUser.username; // exibe o nome do usuario logado
-            saluName.textContent = currentUser.username; // exibe a saudação do usuario logado
-
-            // Atualiza as informações do usuário na seção info-section
-            const nameParts = currentUser.fullname.split(' ').slice(0, 2).join(' '); // Obtém os dois primeiros nomes
-            fullnameInfo.textContent = nameParts;
-            usernameInfo.textContent = `@${currentUser.username}`;
-            userTime.textContent = getTimeSinceRegistration(currentUser.registrationDate);
-            userDetails.textContent = 'Detalhes do usuário'; // Adicione detalhes adicionais se necessário
-            profilePictureInfo.src = './assets/img/avatar-profile-max.png'; // Atualize o caminho se necessário
-
-            infoSection.style.display = 'block'; // mostra o container info-section
-
-            displayPosts(); // exibe as postagens
+        if (hours >= 6 && hours < 12) {
+            return 'Bom dia';
+        } else if (hours >= 12 && hours < 18) {
+            return 'Boa tarde';
         } else {
-            auth.style.display = 'flex'; // mostra o container auth
-            authSection.style.display = 'flex'; // mostra a seção de login/registro
-            header.style.display = 'none'; // esconde o container header'
-            main.style.display = 'none'; // esconde o container main
-            infoSection.style.display = 'none'; // esconde o container info-section'
-            postsSection.style.display = 'none'; // esconde a seção de postagens
-            gameSection.style.display = 'none'; // esconde a seção de jogo
+            return 'Boa noite';
         }
     };
 
-    // Função para exibir posts
+    const showSection = () => {
+        if (currentUser) {
+            elements.auth.style.display = 'none';
+            elements.authSection.style.display = 'none';
+            elements.header.style.display = 'flex';
+            elements.main.style.display = 'grid';
+            elements.infoSection.style.display = 'flex';
+            elements.postsSection.style.display = 'flex';
+            elements.gameSection.style.display = 'none'; // Atualizado
+            elements.profileSection.style.display = 'none'; // Adicionado
+            elements.ilusSection.style.display = 'flex';
+
+            elements.profileNameHeader.textContent = currentUser.username;
+            elements.saluName.textContent = `${getGreeting()}, ${currentUser.username}`;
+
+            const nameParts = currentUser.fullname.split(' ').slice(0, 2).join(' ');
+            elements.fullnameInfo.textContent = nameParts;
+            elements.usernameInfo.textContent = `@${currentUser.username}`;
+            elements.userTime.textContent = getTimeSinceRegistration(currentUser.registrationDate);
+            elements.userDetails.textContent = 'Detalhes do usuário';
+            elements.profilePictureInfo.src = './assets/img/avatar-profile-max.svg';
+
+            displayPosts();
+        } else {
+            elements.auth.style.display = 'flex';
+            elements.authSection.style.display = 'flex';
+            elements.header.style.display = 'none';
+            elements.main.style.display = 'none';
+            elements.infoSection.style.display = 'none';
+            elements.postsSection.style.display = 'none';
+            elements.gameSection.style.display = 'none';
+            elements.profileSection.style.display = 'none'; // Adicionado
+            elements.ilusSection.style.display = 'none';
+
+            // Preencher campos com dados salvos, se existirem
+            const savedEmail = localStorage.getItem('savedEmail');
+            const savedPassword = localStorage.getItem('savedPassword');
+            const rememberMeCheckbox = document.getElementById('remember-me');
+
+            if (savedEmail && savedPassword) {
+                document.getElementById('login-email').value = savedEmail;
+                document.getElementById('login-password').value = savedPassword;
+                rememberMeCheckbox.checked = true;
+            } else {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+                rememberMeCheckbox.checked = false;
+            }
+        }
+    };
+
     const displayPosts = () => {
-        postsList.innerHTML = '';
-        const userPosts = posts.filter(post => post.userId === currentUser.id);
-        userPosts.forEach(post => {
+        elements.postsList.innerHTML = '';
+        posts.filter(post => post.userId === currentUser.id).forEach(post => {
             const postDiv = document.createElement('div');
             postDiv.classList.add('post');
-            postDiv.innerHTML = `
-                <p>${post.content}</p>
-                <div id="post-btns">
+
+            // Adiciona o título do post
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = post.title;
+
+            // Adiciona o conteúdo do post
+            const contentElement = document.createElement('div');
+            contentElement.innerHTML = post.content;
+
+            // Adiciona os botões de ação
+            const btnsDiv = document.createElement('div');
+            btnsDiv.classList.add('post-btns');
+            btnsDiv.innerHTML = `
                 <button onclick="editPost('${post.id}')"><i class="fa-regular fa-pen-to-square"></i></button>
                 <button onclick="deletePost('${post.id}')"><i class="fa-solid fa-trash-can"></i></button>
-                <div>
             `;
-            postsList.appendChild(postDiv);
+
+            // Adiciona os elementos ao postDiv
+            postDiv.appendChild(titleElement);
+            postDiv.appendChild(contentElement);
+            postDiv.appendChild(btnsDiv);
+
+            // Adiciona o postDiv à lista de posts
+            elements.postsList.appendChild(postDiv);
         });
     };
 
-    // Função para registrar um usuário
+
     const registerUser = (fullname, username, email, password) => {
         const user = {
             id: Date.now().toString(),
@@ -112,53 +167,120 @@ document.addEventListener('DOMContentLoaded', () => {
             username,
             email,
             password,
-            registrationDate: new Date().toISOString() // Adiciona a data de registro
+            registrationDate: new Date().toISOString()
         };
         users.push(user);
         currentUser = user;
         saveData();
         alert('Usuário cadastrado com sucesso!');
-        registerForm.reset();
+        elements.registerForm.reset();
         showSection();
     };
 
-    // Função para login do usuário
     const loginUser = (email, password) => {
         const user = users.find(user => user.email === email && user.password === password);
         if (user) {
             currentUser = user;
             saveData();
-            // Fechar o dropdown do perfil ao fazer logout
-            profileDropdown.style.display = 'none';
+            elements.profileDropdown.style.display = 'none';
             showSection();
         } else {
             alert('Credenciais inválidas');
         }
     };
 
-    // Função para trocar para o formulário de cadastro
     const showRegisterForm = () => {
-        loginContainer.style.display = 'none';
-        registerContainer.style.display = 'block';
+        elements.loginContainer.style.display = 'none';
+        elements.registerContainer.style.display = 'block';
     };
 
-    // Função para trocar para o formulário de login
     const showLoginForm = () => {
-        loginContainer.style.display = 'block';
-        registerContainer.style.display = 'none';
+        elements.loginContainer.style.display = 'block';
+        elements.registerContainer.style.display = 'none';
     };
 
-    // Event listener para formulário de login
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        loginUser(email, password);
+    const editPost = (postId) => {
+        const post = posts.find(post => post.id === postId);
+        if (post) {
+            const newContent = prompt('Edit Post', post.content);
+            if (newContent !== null) {
+                post.content = newContent;
+                saveData();
+                displayPosts();
+            }
+        }
+    };
+
+    const deletePost = (postId) => {
+        posts = posts.filter(post => post.id !== postId);
+        saveData();
+        displayPosts();
+    };
+
+    const savePage = (content) => {
+        if (!content.trim()) {
+            alert('O conteúdo não pode estar vazio.');
+            return;
+        }
+
+        const date = new Date();
+        const formattedTitle = `${date.toLocaleDateString()} | ${date.toLocaleTimeString()}`;
+        const post = {
+            id: Date.now().toString(),
+            userId: currentUser.id,
+            title: formattedTitle,
+            content: `<p>${content}</p>`
+        };
+
+        posts.push(post);
+        saveData();
+        displayPosts();
+        alert('Página salva com sucesso!');
+        elements.postForm.reset();
+    };
+
+    const getRandomImage = () => {
+        const UNSPLASH_ACCESS_KEY = 'nlGeOlG27NPrDTQ0U_Bko6d8lEBS0yWb2Z6gSGepZck';
+        const randomEndpoint = `https://api.unsplash.com/photos/random?query=green&client_id=${UNSPLASH_ACCESS_KEY}`;
+
+        fetch(randomEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                elements.imgElement.src = data.urls.regular;
+                elements.imgElement.alt = data.alt_description || 'Imagem aleatória';
+            })
+            .catch(error => {
+                console.error('Erro ao buscar imagem aleatória:', error);
+            });
+    };
+
+    // Adiciona eventos para links do header
+    const updateActiveLink = (activeLink) => {
+        const links = document.getElementsByClassName('nav_item');
+        for (let i = 0; i < links.length; i++) {
+            const link = links[i];
+            if (link.firstElementChild === activeLink) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        }
+    };
+
+
+    // Event listeners
+    elements.linkToRegister.addEventListener('click', (event) => {
+        event.preventDefault();
+        showRegisterForm();
     });
 
-    // Event listener para formulário de registro
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    elements.linkToLogin.addEventListener('click', (event) => {
+        event.preventDefault();
+        showLoginForm();
+    });
+
+    elements.registerForm.addEventListener('submit', (event) => {
+        event.preventDefault();
         const fullname = document.getElementById('register-fullname').value;
         const username = document.getElementById('register-username').value;
         const email = document.getElementById('register-email').value;
@@ -166,100 +288,83 @@ document.addEventListener('DOMContentLoaded', () => {
         registerUser(fullname, username, email, password);
     });
 
-    // Event listener para troca de formulário de login para cadastro
-    linkToRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        showRegisterForm();
+    elements.loginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        loginUser(email, password);
     });
 
-    // Event listener para troca de formulário de cadastro para login
-    linkToLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        showLoginForm();
-    });
-
-    // Event listener para formulário de postagem
-    postForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    elements.postForm.addEventListener('submit', (event) => {
+        event.preventDefault();
         const content = document.getElementById('post-content').value;
-        const post = {
-            id: Date.now().toString(),
-            userId: currentUser.id,
-            content
-        };
-        posts.push(post);
-        saveData();
-        displayPosts();
-        postForm.reset();
+        savePage(content);
     });
 
-    // Event listener para o link Excluir Conta
-    deleteAccountLink.addEventListener('click', () => {
-        // Confirmação com o usuário antes de excluir a conta
-        const confirmDelete = confirm('Tem certeza de que deseja excluir sua conta? Esta ação é irreversível.');
-        if (confirmDelete) {
-            // Remove o usuário do localStorage
-            users = users.filter(user => user.id !== currentUser.id);
-            currentUser = null; // Define currentUser como null
-            saveData(); // Salva as alterações no localStorage
-            alert('Conta excluída com sucesso.');
-            // Redireciona ou atualiza a interface conforme necessário
-            showSection(); // Exibe a seção apropriada (por exemplo, a tela de autenticação)
-        }
-    });
-
-    // Event listener para logout
-    logoutButton.addEventListener('click', () => {
+    elements.logoutButton.addEventListener('click', () => {
         currentUser = null;
         saveData();
         showSection();
     });
 
-    // Event listener para o botão do dropdown de perfil
-    profileDropdownButton.addEventListener('click', () => {
-        if (profileDropdown.style.display === 'none' || profileDropdown.style.display === '') {
-            profileDropdown.style.display = 'block';
-        } else {
-            profileDropdown.style.display = 'none';
+    elements.profileDropdownButton.addEventListener('click', () => {
+        elements.profileDropdown.style.display = elements.profileDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    elements.deleteAccountLink.addEventListener('click', () => {
+        if (confirm('Você tem certeza de que deseja deletar sua conta?')) {
+            users = users.filter(user => user.id !== currentUser.id);
+            currentUser = null;
+            saveData();
+            showSection();
         }
     });
 
-    // Função para editar um post
-    window.editPost = (postId) => {
-        const post = posts.find(post => post.id === postId);
-        const newContent = prompt('Edit Post', post.content);
-        if (newContent !== null) {
-            post.content = newContent;
-            saveData();
-            displayPosts();
+    elements.homeLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (currentUser) {
+            showSection();
+            updateActiveLink(elements.homeLink);
+        } else {
+            alert('Por favor, faça login para acessar o jogo.');
         }
-    };
+    });
 
-    // Função para apagar um post
-    window.deletePost = (postId) => {
-        posts = posts.filter(post => post.id !== postId);
-        saveData();
-        displayPosts();
-    };
+    elements.gameLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (currentUser) {
+            elements.infoSection.style.display = 'flex';
+            elements.postsSection.style.display = 'none';
+            elements.gameSection.style.display = 'flex';
+            elements.profileSection.style.display = 'none'; // Adicionado
+            elements.ilusSection.style.display = 'flex';
+            updateActiveLink(elements.gameLink);
+        } else {
+            alert('Por favor, faça login para acessar o jogo.');
+        }
+    });
+
+    elements.profileLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (currentUser) {
+            elements.infoSection.style.display = 'flex';
+            elements.postsSection.style.display = 'none';
+            elements.gameSection.style.display = 'none'; // Atualizado
+            elements.profileSection.style.display = 'flex'; // Adicionado
+            elements.ilusSection.style.display = 'flex';
+            updateActiveLink(elements.profileLink);
+        } else {
+            alert('Por favor, faça login para acessar o perfil.');
+        }
+    });
+
+    // Atualizar a imagem inicialmente
+    getRandomImage();
 
     // Exibe a seção apropriada ao carregar a página
     showSection();
+
+    // Funções globais para edição e exclusão de posts
+    window.editPost = editPost;
+    window.deletePost = deletePost;
 });
-
-// img aleatoria
-
-const UNSPLASH_ACCESS_KEY = 'nlGeOlG27NPrDTQ0U_Bko6d8lEBS0yWb2Z6gSGepZck';
-
-const imgElement = document.getElementById('random-img');
-
-function getRandomImage() {
-    fetch(`https://api.unsplash.com/photos/random?query=green&client_id=${UNSPLASH_ACCESS_KEY}`)
-        .then(response => response.json())
-        .then(data => {
-            imgElement.src = data.urls.regular;
-        })
-        .catch(error => console.error('Erro ao obter imagem:', error));
-}
-
-// Atualizar a imagem inicialmente
-getRandomImage();
