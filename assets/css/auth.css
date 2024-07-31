@@ -1,0 +1,197 @@
+#auth {
+  display: flex;
+  height: 100vh;
+}
+
+#auth-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "image-container form-container";
+  height: 100%;
+  width: 100%;
+  gap: 2rem;
+}
+
+#image-container {
+  background-color: var(--dark-05);
+  grid-area: image-container;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+#image-container img {
+  width: 40%;
+  height: auto;
+  object-fit: cover;
+}
+
+#form-container {
+  background-color: var(--dark-50);
+  grid-area: form-container;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+  width: 50%;
+  margin: 0 auto;
+}
+
+#form-container img {
+  width: 50%;
+  height: auto;
+  object-fit: cover;
+}
+
+#auth form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+#auth h1 {
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+}
+
+#auth p {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  width: 100%;
+  height: 38px;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--brand-color-20);
+  border-radius: 0.3rem;
+  background-color: var(--brand-color-30);
+  color: var(--brand-color-20);
+}
+
+form input[type="email"]::placeholder,
+form input[type="password"]::placeholder,
+form input[type="text"]::placeholder {
+  color: var(--brand-color-20);
+}
+
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form input[type="text"]:focus {
+  border: 2px solid var(--brand-color-20);
+}
+
+form button {
+  padding: 1rem;
+  font-size: 14px;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  width: 100%;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form button[type="submit"] {
+  background-color: var(--brand-color-10);
+  border: none;
+  color: var(--dark-50);
+}
+
+form button[type="button"] {
+  background-color: var(--dark-05);
+  border: none;
+  color: var(--dark-50);
+}
+
+form button:hover {
+  transform: scale(0.98);
+}
+
+button #google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+form span {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--dark-20);
+  margin-top: 1rem;
+}
+
+form span a {
+  color: var(--brand-color-10);
+  text-decoration: none;
+}
+
+.button_secondary {
+  cursor: no-drop;
+}
+
+.container_rp {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+  font-size: 14px;
+  text-align: left;
+}
+
+.container_remember {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+#password-reset {
+  color: var(--brand-color-10);
+}
+
+#password-reset:hover,
+a:hover {
+  color: var(--brand-color-20);
+}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--brand-color-20);
+  background-color: var(--brand-color-30);
+  cursor: pointer;
+  appearance: none;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--brand-color-20);
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--brand-color-10);
+}
+
+#login-container.active,
+#register-container.active {
+  display: block;
+}

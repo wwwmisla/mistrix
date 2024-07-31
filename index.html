@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Mistrix</title>
+    <!-- CSS -->
+    <link href="./assets/css/styles.css" rel="stylesheet" type="text/css" />
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <header id="header">
+        <nav id="navbar">
+            <div class="header_logo">
+                <a href="#">
+                    <img src="./assets/img/logo-name.svg" alt="Mistrix" id="logo-name-header">
+                </a>
+            </div>
+            <ul id="nav-list">
+                <li class="nav_item active"><a id="home-link" href="#home">Início</a></li>
+                <li class="nav_item"><a id="profile-link" href="#profile">Perfil</a></li>
+                <li class="nav_item"><a id="game-link" href="#games">Jogo</a></li>
+            </ul>
+            <div class="header_search">
+                <input type="text" placeholder="Pesquisar no Mistrix" id="search-input">
+                <button type="submit" id="search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            <div class="header_profile">
+                <img src="./assets/img/avatar-profile-min.svg" alt="Foto do Perfil" id="profile-picture">
+                <span id="profile-name"></span>
+                <button id="profile-dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+                <div id="profile-dropdown">
+                    <ul>
+                        <li><a id="delete-account">Excluir Conta</a></li>
+                        <li><a id="logout">Sair</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="auth" class="auth_container">
+        <!-- Seção de Login/Cadastro -->
+        <div id="auth-section">
+            <div id="image-container">
+                <img src="./assets/img/logo-full.svg" alt="Mistrix" id="logo-full">
+            </div>
+
+            <div id="form-container">
+                <img src="./assets/img/logo-name.svg" alt="Mistrix" id="logo-name">
+
+                <div id="login-container">
+                    <div id="login-header">
+                        <h1>Bem vindo de volta</h1>
+                        <p>Você encontrou o caminho <br> entre no <span style="color: #31a252;">Mistrix</span></p>
+                    </div>
+                    <div id="login-main">
+                        <form id="login-form">
+                            <input type="email" id="login-email" placeholder="E-mail" required>
+                            <input type="password" id="login-password" placeholder="Senha" required>
+                            <div class="container_rp">
+                                <div class="container_remember">
+                                    <input type="checkbox" id="remember-me">
+                                    <label for="remember-me">Lembre-se de mim</label>
+                                </div>
+                                <a href="" id="password-reset">Esqueceu sua senha?</a>
+                            </div>
+                            <button class="button button_primary" type="submit">Login</button>
+                            <button class="button button_secondary" type="button">
+                                <img src="./assets/img/icon-google.svg" id="google-icon">
+                                Ou faça login com o Google</button>
+                            <span>Não tem uma conta? <a href="" id="link-to-register">Cadastre-se</a></span>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="password-reset-container" style="display: none;">
+                    <!-- Seção de recuperação de senha -->
+                    <h1>Recuperar Senha</h1>
+                    <form id="password-reset-form">
+                        <input type="email" id="reset-email" placeholder="Digite seu e-mail" required>
+                        <button type="submit">Enviar e-mail de recuperação</button>
+                    </form>
+                    <a href="#" id="back-to-login">Voltar para o login</a>
+                </div>
+
+                <div id="register-container" style="display: none;">
+                    <div class="register_header">
+                        <h1>Bem-vindo</h1>
+                        <p>Você encontrou o caminho <br> cadastra-se no <span style="color: #31a252;">Mistrix</span></p>
+                    </div>
+                    <div id="register-main">
+                        <form id="register-form">
+                            <input type="email" id="register-email" placeholder="E-mail" required>
+                            <input type="text" id="register-fullname" placeholder="Nome completo" required>
+                            <input type="text" id="register-username" placeholder="Nome de usuário" required>
+                            <input type="password" id="register-password" placeholder="Senha" required>
+                            <button class="button button_primary" type="submit">Cadastre-se</button>
+                            <button class="button button_secondary" type="button">
+                                <img src="./assets/img/icon-google.svg" id="google-icon">
+                                Ou cadastre-se com o Google</button>
+                            <span>Já tem uma conta? <a href="" id="link-to-login">Conecte-se</a></span>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="main">
+        <div class="main_container">
+            <!-- Seção Profile -->
+            <section id="info-section">
+                <div id="user-info">
+                    <img src="./assets/img/avatar-profile-max.svg" alt="Foto do Perfil" id="profile-picture-info">
+                    <div>
+                        <span id="fullname-info"></span>
+                        <span id="username-info"></span>
+                        <img src="./assets/img/unicornio.svg" alt="Unicornio" id="unicornio-icon">
+                        <span id="user-time"></span>
+                        <p id="user-details"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Posts -->
+            <section id="posts-section">
+                <div id="salu-container">
+                    <h2 id="salu-username"></h2>
+                    <p>Escreva uma nova mensagem no seu diário.</p>
+                    <form id="post-form">
+                        <h3>Criar página</h3>
+                        <div class="form_container">
+                            <div>
+                                <input type="text" id="post-content" placeholder="O que você está pensando?"
+                                    title="Escreva algo em seu diário..." maxlength="50" required></input>
+                            </div>
+                            <button type="submit">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <form id="edit-post-form" style="display: none;">
+                        <h3>Edite sua página</h3>
+                        <div class="form_control">
+                            <input type="text" id="edit-input" />
+                            <button id="check-edit-btn" type="submit" title="Editar tarefa">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <button id="cancel-edit-btn" title="Cancelar">
+                                <i class="fa-solid fa-close"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="post-container">
+                    <h3>Páginas</h3>
+                    <div id="posts-list"></div>
+                </div>
+            </section>
+
+            <!-- Seção do Jogo -->
+            <section id="game-section" style="display: none;">
+                <div class="game-controls">
+                    <label for="difficulty">Dificuldade:</label>
+                    <select id="difficulty">
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Médio</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+
+                    <label for="playerSymbol">Você é:</label>
+                    <select id="playerSymbol">
+                        <option value="X">X</option>
+                        <option value="O">O</option>
+                    </select>
+
+                    <button id="startGame">Iniciar</button>
+                    <button id="pauseGame">Pausar</button>
+                    <button id="resetGame">Resetar</button>
+                </div>
+
+                <div id="gameBoard" class="game-board">
+                    <!-- Tabuleiro do jogo será gerado aqui -->
+                </div>
+
+                <div id="ranking">
+                    <h2>Ranking</h2>
+                    <p>Vitórias: <span id="wins">0</span></p>
+                    <p>Derrotas: <span id="losses">0</span></p>
+                    <p>Empates: <span id="draws">0</span></p>
+                </div>
+            </section>
+
+            <!-- Seção Edit Profile  -->
+            <section id="edit-profile-section" style="dsplay: none;">
+                
+            </section>
+
+            <!-- Seção do Ilustração -->
+            <section id="ilus-section">
+                <img id="random-img" src="" alt="Imagem dos anos 2000">
+                <div id="audio-container">
+                    <div class="audio-wrapper">
+                        <audio id="audio-player" controls>
+                            <source src="./assets/audio/nvetl8.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/jogo-da-velha.js"></script>
+</body>
+
+</html>
