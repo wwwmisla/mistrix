@@ -32,13 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
         imgElement: document.getElementById('random-img'),
         homeLink: document.getElementById('home-link'),
         gameLink: document.getElementById('game-link'),
-        profileLink: document.getElementById('profile-link') // Adicionei essa linha
+        profileLink: document.getElementById('profile-link'),
+        saluNameEp: document.getElementById('username-ep'),
+        searchInput: document.getElementById('search-input'),
+        searchButton: document.getElementById('search-button')
     };
 
     // Estado inicial do armazenamento local e de sessão
     let users = JSON.parse(localStorage.getItem('users')) || [];
     let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     let posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    // Recupera as informações do perfil do usuário do localStorage
+    const profileData = JSON.parse(localStorage.getItem('profileData'));
 
     // Funções auxiliares
     const saveData = () => {
@@ -76,6 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Função para calcular o signo
+    function calcularSigno(dataNascimento) {
+        const [dia, mes] = dataNascimento.split('/').map(Number);
+        
+        if ((mes === 3 && dia >= 21) || (mes === 4 && dia <= 19)) return 'Áries';
+        if ((mes === 4 && dia >= 20) || (mes === 5 && dia <= 20)) return 'Touro';
+        if ((mes === 5 && dia >= 21) || (mes === 6 && dia <= 20)) return 'Gêmeos';
+        if ((mes === 6 && dia >= 21) || (mes === 7 && dia <= 22)) return 'Câncer';
+        if ((mes === 7 && dia >= 23) || (mes === 8 && dia <= 22)) return 'Leão';
+        if ((mes === 8 && dia >= 23) || (mes === 9 && dia <= 22)) return 'Virgem';
+        if ((mes === 9 && dia >= 23) || (mes === 10 && dia <= 22)) return 'Libra';
+        if ((mes === 10 && dia >= 23) || (mes === 11 && dia <= 21)) return 'Escorpião';
+        if ((mes === 11 && dia >= 22) || (mes === 12 && dia <= 21)) return 'Sagitário';
+        if ((mes === 12 && dia >= 22) || (mes === 1 && dia <= 19)) return 'Capricórnio';
+        if ((mes === 1 && dia >= 20) || (mes === 2 && dia <= 18)) return 'Aquário';
+        if ((mes === 2 && dia >= 19) || (mes === 3 && dia <= 20)) return 'Peixes';
+
+        return 'Signo não identificado';
+    }
+
     const showSection = () => {
         if (currentUser) {
             elements.auth.style.display = 'none';
@@ -95,8 +121,26 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.fullnameInfo.textContent = nameParts;
             elements.usernameInfo.textContent = `@${currentUser.username}`;
             elements.userTime.textContent = getTimeSinceRegistration(currentUser.registrationDate);
-            elements.userDetails.textContent = 'Detalhes do usuário';
+            
+            // Atualiza os detalhes do usuário
+            if (profileData) {
+                const sexo = profileData.sexo;
+                const relacionamento = profileData.relacionamento;
+                const aniversario = profileData.aniversario;
+                const moraEm = `${profileData.moroEm} - ${profileData.pais}`;
+                const signo = calcularSigno(aniversario);
+
+                const details = `
+                    ${sexo === 'Masculino' ? '👨' : sexo === 'Feminino' ? '👩' : '🌈'} ${sexo}, ${relacionamento === 'Solteiro(a)' ? '🧑‍🎤' : relacionamento === 'Casado(a)' ? '💍' : relacionamento === 'Namorando' ? '❤️' : relacionamento === 'Viúvo(a)' ? '😢' : '😅'} ${relacionamento}, ${signo} ${signo === 'Áries' ? '♈' : signo === 'Touro' ? '♉' : signo === 'Gêmeos' ? '♊' : signo === 'Câncer' ? '♋' : signo === 'Leão' ? '♌' : signo === 'Virgem' ? '♍' : signo === 'Libra' ? '♎' : signo === 'Escorpião' ? '♏' : signo === 'Sagitário' ? '♐' : signo === 'Capricórnio' ? '♑' : signo === 'Aquário' ? '♒' : '♓'}, 📍 ${moraEm}`;
+
+                elements.userDetails.textContent = details;
+            } else {
+                elements.userDetails.textContent = 'Informações do usuário não encontradas.';
+            }
+
             elements.profilePictureInfo.src = './assets/img/avatar-profile-max.svg';
+
+            elements.saluNameEp.textContent = currentUser.username;
 
             displayPosts();
         } else {
@@ -158,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.postsList.appendChild(postDiv);
         });
     };
-
 
     const registerUser = (fullname, username, email, password) => {
         const user = {
@@ -267,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-
     // Event listeners
     elements.linkToRegister.addEventListener('click', (event) => {
         event.preventDefault();
@@ -358,6 +400,163 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Editar perfil
+    document.getElementById('edit-profile-btn').addEventListener('click', function () {
+        const btn = this;
+        const isEditing = btn.textContent === 'Salvar';
+        const cancelBtn = document.getElementById('cancel-profile-btn');
+    
+        const spansToEdit = {
+            relacionamento: {
+                span: document.getElementById('relationship'),
+                input:
+                    `<select>
+                    <option value="Solteiro(a)">Solteiro(a)</option>
+                    <option value="Namorando">Namorando</option>
+                    <option value="Casado(a)">Casado(a)</option>
+                    <option value="Viúvo(a)">Viúvo(a)</option>
+                    <option value="Outro">Outro</option>
+                </select>`
+            },
+            aniversario: {
+                span: document.getElementById('birthday'),
+                input: '<input type="date">'
+            },
+            idade: {
+                span: document.getElementById('age'),
+                input: '<input type="number" disabled>'
+            },
+            quemSouEu: {
+                span: document.getElementById('about-me'),
+                input: '<input type="text">'
+            },
+            sexo: {
+                span: document.getElementById('gender'),
+                input:
+                    `<select id="gender-select">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>`
+            },
+            moroEm: {
+                span: document.getElementById('residence'),
+                input: '<input type="text">'
+            },
+            pais: {
+                span: document.getElementById('country'),
+                input: '<input type="text">'
+            },
+            cidadeNatal: {
+                span: document.getElementById('hometown'),
+                input: '<input type="text">'
+            },
+        };
+    
+        if (!isEditing) {
+            // Iniciar edição
+            for (const key in spansToEdit) {
+                const { span, input } = spansToEdit[key];
+                const currentValue = span.textContent;
+    
+                span.innerHTML = input;
+    
+                const inputElement = span.querySelector('input, select, textarea');
+    
+                // Ajuste específico para o campo de data
+                if (key === 'aniversario') {
+                    const [day, month, year] = currentValue.split('/');
+                    const formattedDate = `${year}-${month}-${day}`;
+                    inputElement.value = formattedDate;
+                } else {
+                    inputElement.value = currentValue;
+                }
+            }
+    
+            btn.textContent = 'Salvar';
+            cancelBtn.style.display = 'inline-block'; // Mostrar o botão "Cancelar"
+    
+            cancelBtn.addEventListener('click', function cancelEdit() {
+                for (const key in spansToEdit) {
+                    const { span } = spansToEdit[key];
+                    const inputElement = span.querySelector('input, select, textarea');
+                    span.textContent = inputElement.value;
+                }
+    
+                const savedProfileData = JSON.parse(localStorage.getItem('profileData'));
+                if (savedProfileData) {
+                    document.getElementById('relationship').textContent = savedProfileData.relacionamento;
+                    document.getElementById('birthday').textContent = savedProfileData.aniversario;
+                    document.getElementById('age').textContent = savedProfileData.idade;
+                    document.getElementById('about-me').textContent = savedProfileData.quemSouEu;
+                    document.getElementById('gender').textContent = savedProfileData.sexo;
+                    document.getElementById('residence').textContent = savedProfileData.moroEm;
+                    document.getElementById('country').textContent = savedProfileData.pais;
+                    document.getElementById('hometown').textContent = savedProfileData.cidadeNatal;
+                }
+    
+                btn.textContent = 'Editar meu perfil';
+                cancelBtn.style.display = 'none'; // Esconder o botão "Cancelar"
+                cancelBtn.removeEventListener('click', cancelEdit); // Remover o evento de cancelamento
+            });
+    
+        } else {
+            // Salvar as edições
+            const genderSelect = document.getElementById('gender-select');
+            const selectedGender = genderSelect ? genderSelect.value : '';
+    
+            const relationshipSelect = spansToEdit.relacionamento.span.querySelector('select');
+            let relationshipValue = relationshipSelect ? relationshipSelect.value : '';
+    
+            if (selectedGender === 'Masculino' && relationshipValue.endsWith('(a)')) {
+                relationshipValue = relationshipValue.slice(0, -4) + 'o';
+            } else if (selectedGender === 'Feminino' && relationshipValue.endsWith('(a)')) {
+                relationshipValue = relationshipValue.slice(0, -4) + 'a';
+            }
+    
+            const birthdayInput = spansToEdit.aniversario.span.querySelector('input[type="date"]');
+            const birthDate = new Date(birthdayInput.value);
+            const day = String(birthDate.getUTCDate()).padStart(2, '0');
+            const month = String(birthDate.getUTCMonth() + 1).padStart(2, '0');
+            const year = birthDate.getUTCFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+    
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+    
+            spansToEdit.relacionamento.span.textContent = relationshipValue;
+            spansToEdit.aniversario.span.textContent = formattedDate;
+            spansToEdit.idade.span.textContent = age;
+    
+            for (const key in spansToEdit) {
+                if (key !== 'relacionamento' && key !== 'aniversario' && key !== 'idade') {
+                    const { span } = spansToEdit[key];
+                    const input = span.querySelector('input, select, textarea');
+                    span.textContent = input.value;
+                }
+            }
+    
+            const profileData = {
+                relacionamento: relationshipValue,
+                aniversario: formattedDate,
+                idade: age,
+                quemSouEu: spansToEdit.quemSouEu.span.textContent,
+                sexo: selectedGender,
+                moroEm: spansToEdit.moroEm.span.textContent,
+                pais: spansToEdit.pais.span.textContent,
+                cidadeNatal: spansToEdit.cidadeNatal.span.textContent,
+            };
+            localStorage.setItem('profileData', JSON.stringify(profileData));
+    
+            btn.textContent = 'Editar meu perfil';
+            cancelBtn.style.display = 'none'; // Esconder o botão "Cancelar"
+        }
+    });
+    
     // Atualizar a imagem inicialmente
     getRandomImage();
 
@@ -367,4 +566,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Funções globais para edição e exclusão de posts
     window.editPost = editPost;
     window.deletePost = deletePost;
+
+    // Carregar dados do perfil ao carregar a página
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedProfileData = JSON.parse(localStorage.getItem('profileData'));
+        if (savedProfileData) {
+            document.getElementById('relationship').textContent = savedProfileData.relacionamento;
+            document.getElementById('birthday').textContent = savedProfileData.aniversario;
+            document.getElementById('age').textContent = savedProfileData.idade;
+            document.getElementById('about-me').textContent = savedProfileData.quemSouEu;
+            document.getElementById('gender').textContent = savedProfileData.sexo;
+            document.getElementById('residence').textContent = savedProfileData.moroEm;
+            document.getElementById('country').textContent = savedProfileData.pais;
+            document.getElementById('hometown').textContent = savedProfileData.cidadeNatal;
+        }
+    });
+
 });

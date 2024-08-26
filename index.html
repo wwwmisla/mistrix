@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>Mistrix</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/img/favicon.svg" type="image/svg+xml">
     <!-- CSS -->
     <link href="./assets/css/styles.css" rel="stylesheet" type="text/css" />
     <!-- Font awesome -->
@@ -207,8 +209,56 @@
             </section>
 
             <!-- Seção Edit Profile  -->
-            <section id="edit-profile-section" style="dsplay: none;">
+            <section id="edit-profile-section" style="display: none;">
+                <h2>Olá, <span id="username-ep">[Nome do Usuário]</span>!</h2>
+                <p>Edite suas informações, se desejar.</p>
+
+                <div id="profile-fields">
+                    <div class="edit-field">
+                        <label for="relationship">Relacionamento:</label>
+                        <span id="relationship" class="editable" contenteditable="false">[Seu relacionamento]</span>
+                    </div>
                 
+                    <div class="edit-field">
+                        <label for="birthday">Aniversário:</label>
+                        <span id="birthday" class="editable" contenteditable="false">[Seu aniversário]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="age">Idade:</label>
+                        <span id="age" class="editable" contenteditable="false">[Sua idade]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="about-me">Quem eu sou:</label>
+                        <span id="about-me" class="editable" contenteditable="false">[Sobre você]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="gender">Sexo:</label>
+                        <span id="gender" class="editable" contenteditable="false">[Seu sexo]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="residence">Moro em:</label>
+                        <span id="residence" class="editable" contenteditable="false">[Sua moradia atual]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="country">País:</label>
+                        <span id="country" class="editable" contenteditable="false">[Seu país]</span>
+                    </div>
+                
+                    <div class="edit-field">
+                        <label for="hometown">Cidade natal:</label>
+                        <span id="hometown" class="editable" contenteditable="false">[Sua cidade natal]</span>
+                    </div>
+                
+                </div>
+
+                <button id="edit-profile-btn" class="button button_primary">Editar meu perfil</button>
+                <button id="cancel-profile-btn" class="button button_secondary" style="display: none;">Cancelar</button>
+                <button id="save-profile-btn" class="button button_secondary" style="display: none;">Salvar</button>
             </section>
 
             <!-- Seção do Ilustração -->

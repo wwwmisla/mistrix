@@ -1,6 +1,5 @@
 main {
   background-color: var(--brand-color-30);
-  /* padding: 28px 8%; */
   padding: 28px;
   flex: 1;
 }
@@ -20,7 +19,7 @@ main {
 /* Seção Profile  */
 #info-section {
   width: 280px;
-  height: 466px;
+  height: auto;
   background-color: var(--dark-50);
   border-radius: 10px;
   display: flex;
@@ -29,6 +28,7 @@ main {
   justify-content: flex-start;
   gap: 24px;
   padding: 24px;
+  text-align: center;
 }
 
 #user-info>div {
@@ -62,21 +62,17 @@ main {
 /* Seção de Posts */
 #posts-section {
   width: 592px;
-  /* height: 756px; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 24px;
-  /* padding: 24px; */
 }
 
 #salu-container {
   width: 592px;
-  /* height: 298px; */
   background-color: var(--dark-50);
-  /* padding: 32px 24px; */
   padding: 24px;
   border-radius: 10px;
   display: flex;
@@ -85,13 +81,13 @@ main {
 }
 
 #salu-username,
-#salu-container h3 {
+#salu-container h3, #edit-profile-section h2 {
   font-size: 20px;
   font-weight: 600;
   color: var(--dark-10);
 }
 
-#salu-container p {
+#salu-container p , #edit-profile-section p {
   background-color: var(--dark-40);
   font-size: 14px;
   padding: 10px;
@@ -151,7 +147,6 @@ main {
 /* Páginas  */
 #post-container {
   width: 592px;
-  /* height: 466px; */
   background-color: var(--dark-50);
   border-radius: 10px;
   display: flex;
@@ -278,7 +273,6 @@ main {
   background-color: var(--dark-50);
   border-radius: 10px;
   width: 280px;
-  /* height: 466px; */
 }
 
 #random-img {
@@ -329,7 +323,6 @@ main {
   padding: 20px;
   background-color: var(--dark-50);
   border-radius: 10px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -425,3 +418,83 @@ main {
 #search-input, #search-button {
   cursor: no-drop;
 }
+
+/* edit-profile */
+#edit-profile-section {
+  width: 592px;
+  background-color: var(--dark-50);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: 24px;
+}
+
+#edit-profile-section h2 span {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--dark-10);
+}
+
+#edit-profile-section p {
+  width: 100%;
+}
+
+#profile-fields {
+  border-top: 1px solid var(--dark-40);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.edit-field:first-of-type {
+  margin-top: 22px;
+}
+
+.edit-field {
+  margin-bottom: 8px;
+}
+
+#edit-profile-section label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dark-20);
+  text-align: left;
+}
+
+#edit-profile-section span {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--dark-10);
+  text-align: left;
+}
+
+#edit-profile-section button {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--brand-color-20);
+  color: var(--brand-color-30);
+  cursor: pointer;
+  transition: background-color ease-in-out 0.3s;
+}
+
+#edit-profile-section button:hover {
+  color: var(--brand-color-20);
+  background-color: var(--brand-color-30);
+}
+
+#edit-profile-section input, select, textarea {
+  background-color: var(--brand-color-30);
+  border-radius: 6px;
+  border: none;
+  padding: 8px;
+  color: var(--brand-color-20);
+  margin-bottom: 10px;
+}
+
+/* Responsividade */
